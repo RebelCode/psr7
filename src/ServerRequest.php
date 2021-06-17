@@ -303,31 +303,31 @@ class ServerRequest extends Request implements ServerRequestInterface
         return $this->attributes;
     }
 
-    public function getAttribute($attribute, $default = null)
+    public function getAttribute($name, $default = null)
     {
-        if (false === array_key_exists($attribute, $this->attributes)) {
+        if (false === array_key_exists($name, $this->attributes)) {
             return $default;
         }
 
-        return $this->attributes[$attribute];
+        return $this->attributes[$name];
     }
 
-    public function withAttribute($attribute, $value): ServerRequestInterface
+    public function withAttribute($name, $value): ServerRequestInterface
     {
         $new = clone $this;
-        $new->attributes[$attribute] = $value;
+        $new->attributes[$name] = $value;
 
         return $new;
     }
 
-    public function withoutAttribute($attribute): ServerRequestInterface
+    public function withoutAttribute($name): ServerRequestInterface
     {
-        if (false === array_key_exists($attribute, $this->attributes)) {
+        if (false === array_key_exists($name, $this->attributes)) {
             return $this;
         }
 
         $new = clone $this;
-        unset($new->attributes[$attribute]);
+        unset($new->attributes[$name]);
 
         return $new;
     }

@@ -45,75 +45,75 @@ trait MessageTrait
         return $this->headers;
     }
 
-    public function hasHeader($header): bool
+    public function hasHeader($name): bool
     {
-        return isset($this->headerNames[strtolower($header)]);
+        return isset($this->headerNames[strtolower($name)]);
     }
 
-    public function getHeader($header): array
+    public function getHeader($name): array
     {
-        $header = strtolower($header);
+        $name = strtolower($name);
 
-        if (!isset($this->headerNames[$header])) {
+        if (!isset($this->headerNames[$name])) {
             return [];
         }
 
-        $header = $this->headerNames[$header];
+        $name = $this->headerNames[$name];
 
-        return $this->headers[$header];
+        return $this->headers[$name];
     }
 
-    public function getHeaderLine($header): string
+    public function getHeaderLine($name): string
     {
-        return implode(', ', $this->getHeader($header));
+        return implode(', ', $this->getHeader($name));
     }
 
-    public function withHeader($header, $value): MessageInterface
+    public function withHeader($name, $value): MessageInterface
     {
-        $this->assertHeader($header);
+        $this->assertHeader($name);
         $value = $this->normalizeHeaderValue($value);
-        $normalized = strtolower($header);
+        $normalized = strtolower($name);
 
         $new = clone $this;
         if (isset($new->headerNames[$normalized])) {
             unset($new->headers[$new->headerNames[$normalized]]);
         }
-        $new->headerNames[$normalized] = $header;
-        $new->headers[$header] = $value;
+        $new->headerNames[$normalized] = $name;
+        $new->headers[$name] = $value;
 
         return $new;
     }
 
-    public function withAddedHeader($header, $value): MessageInterface
+    public function withAddedHeader($name, $value): MessageInterface
     {
-        $this->assertHeader($header);
+        $this->assertHeader($name);
         $value = $this->normalizeHeaderValue($value);
-        $normalized = strtolower($header);
+        $normalized = strtolower($name);
 
         $new = clone $this;
         if (isset($new->headerNames[$normalized])) {
-            $header = $this->headerNames[$normalized];
-            $new->headers[$header] = array_merge($this->headers[$header], $value);
+            $name = $this->headerNames[$normalized];
+            $new->headers[$name] = array_merge($this->headers[$name], $value);
         } else {
-            $new->headerNames[$normalized] = $header;
-            $new->headers[$header] = $value;
+            $new->headerNames[$normalized] = $name;
+            $new->headers[$name] = $value;
         }
 
         return $new;
     }
 
-    public function withoutHeader($header): MessageInterface
+    public function withoutHeader($name): MessageInterface
     {
-        $normalized = strtolower($header);
+        $normalized = strtolower($name);
 
         if (!isset($this->headerNames[$normalized])) {
             return $this;
         }
 
-        $header = $this->headerNames[$normalized];
+        $name = $this->headerNames[$normalized];
 
         $new = clone $this;
-        unset($new->headers[$header], $new->headerNames[$normalized]);
+        unset($new->headers[$name], $new->headerNames[$normalized]);
 
         return $new;
     }
